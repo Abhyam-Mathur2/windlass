@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --color-forge-black: #0A0805;
+  --color-iron-dark: #111109;
+  --color-steel-mid: #1E1C17;
+  --color-aged-steel: #2D2B25;
+  --color-parchment: #C8B89A;
+  --color-aged-gold: #B8962E;
+  --color-forge-ember: #C0392B;
+  --color-molten-glow: #E67E22;
+  --color-cold-steel: #8E9EAB;
+  --color-blade-silver: #D4D8DB;
+  --color-ghost-white: #F5F2ED;
+  --color-blood-red: #8B1A1A;
+
+  --font-display: "Cinzel Decorative", serif;
+  --font-headlines: "Cinzel", serif;
+  --font-body: "Cormorant Garamond", serif;
+  --font-mono: "Courier Prime", monospace;
+  --font-accent: "IM Fell English", serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    cursor: crosshair;
+  }
+  
+  body {
+    @apply bg-forge-black text-ghost-white font-body overflow-x-hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-headlines;
+  }
+}
+
+/* Custom Noise Texture */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-forge-black;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-aged-gold/30 hover:bg-aged-gold/50 transition-colors;
+}
