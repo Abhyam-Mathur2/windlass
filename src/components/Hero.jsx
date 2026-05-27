@@ -1,4 +1,3 @@
-import React from 'react'
 import { motion } from 'framer-motion'
 import SwordScene from './SwordScene'
 
@@ -32,12 +31,12 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
         >
-          <button className="px-10 py-4 bg-aged-gold text-forge-black font-headlines tracking-widest text-xs hover:bg-parchment transition-colors">
+          <a href="#products" className="inline-flex items-center justify-center px-10 py-4 bg-aged-gold text-forge-black font-headlines tracking-widest text-xs hover:bg-parchment transition-colors">
             EXPLORE PRODUCTS
-          </button>
-          <button className="px-10 py-4 border border-aged-gold text-aged-gold font-headlines tracking-widest text-xs hover:bg-aged-gold/10 transition-colors">
+          </a>
+          <a href="#about" className="inline-flex items-center justify-center px-10 py-4 border border-aged-gold text-aged-gold font-headlines tracking-widest text-xs hover:bg-aged-gold/10 transition-colors">
             OUR STORY
-          </button>
+          </a>
         </motion.div>
       </div>
 

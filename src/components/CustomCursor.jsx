@@ -1,44 +1,55 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
 
 export default function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 })
-  const [isHovering, setIsHovering] = useState(false)
+  const cursorRef = useRef(null)
+  const [hovering, setHovering] = useState(false)
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY })
+    const move = (e) => {
+      if (!cursorRef.current) return
+      cursorRef.current.style.transform = `translate(${e.clientX - 12}px, ${e.clientY - 12}px)`
     }
 
-    const handleMouseOver = (e) => {
-      if (e.target.tagName === 'BUTTON' || e.target.tagName === 'A' || e.target.closest('.group')) {
-        setIsHovering(true)
-      } else {
-        setIsHovering(false)
-      }
+    const enter = (e) => {
+      const t = e.target.closest('button, a, [data-cursor-hover], .group')
+      setHovering(!!t)
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseover', handleMouseOver)
+    window.addEventListener('mousemove', move, { passive: true })
+    window.addEventListener('mouseover', enter)
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseover', handleMouseOver)
+      window.removeEventListener('mousemove', move)
+      window.removeEventListener('mouseover', enter)
     }
   }, [])
 
   return (
-    <motion.div
-      className="fixed top-0 left-0 w-8 h-8 pointer-events-none z-[9999] flex items-center justify-center"
-      animate={{
-        x: position.x - 16,
-        y: position.y - 16,
-        scale: isHovering ? 1.5 : 1
-      }}
-      transition={{ type: 'spring', damping: 20, stiffness: 250, mass: 0.5 }}
+    <div
+      ref={cursorRef}
+      className="fixed top-0 left-0 z-[9999] pointer-events-none will-change-transform hidden lg:block"
+      style={{ transition: 'width 0.2s, height 0.2s' }}
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-forge-ember">
-        <path d="M4 20L20 4M15 4l5 5M4 15l5 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+      {/* Sword silhouette — 24×24 SVG, rotated 45° */}
+      <svg
+        width={hovering ? 32 : 24}
+        height={hovering ? 32 : 24}
+        viewBox="0 0 24 24"
+        fill="none"
+        style={{
+          transition: 'width 0.2s, height 0.2s, opacity 0.2s',
+          filter: hovering ? 'drop-shadow(0 0 6px #B8962E)' : 'none',
+          transform: 'rotate(45deg)'
+        }}
+      >
+        {/* Blade */}
+        <line x1="12" y1="2" x2="12" y2="16" stroke="#B8962E" strokeWidth="1.5" strokeLinecap="round" />
+        {/* Crossguard */}
+        <line x1="8" y1="16" x2="16" y2="16" stroke="#B8962E" strokeWidth="2" strokeLinecap="round" />
+        {/* Grip */}
+        <line x1="12" y1="16" x2="12" y2="21" stroke="#C8B89A" strokeWidth="1.2" strokeLinecap="round" />
+        {/* Pommel */}
+        <circle cx="12" cy="22" r="1.2" fill="#B8962E" />
       </svg>
-    </motion.div>
+    </div>
   )
 }

@@ -1,7 +1,12 @@
-import React, { useRef, useMemo } from 'react'
+import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Points, PointMaterial } from '@react-three/drei'
 import * as THREE from 'three'
+
+function randomAt(index, seed = 1) {
+  const value = Math.sin(index * 12.9898 + seed * 78.233) * 43758.5453
+  return value - Math.floor(value)
+}
 
 function FireParticles({ count = 100 }) {
   const points = useRef()
@@ -9,9 +14,9 @@ function FireParticles({ count = 100 }) {
   const positions = useMemo(() => {
     const pos = new Float32Array(count * 3)
     for (let i = 0; i < count; i++) {
-      pos[i * 3] = (Math.random() - 0.5) * 0.5
-      pos[i * 3 + 1] = Math.random() * 2
-      pos[i * 3 + 2] = (Math.random() - 0.5) * 0.5
+      pos[i * 3] = (randomAt(i, count) - 0.5) * 0.5
+      pos[i * 3 + 1] = randomAt(i + count, count + 1) * 2
+      pos[i * 3 + 2] = (randomAt(i + count * 2, count + 2) - 0.5) * 0.5
     }
     return pos
   }, [count])
@@ -19,12 +24,13 @@ function FireParticles({ count = 100 }) {
   useFrame((state) => {
     if (points.current) {
       const positions = points.current.geometry.attributes.position.array
+      const seed = Math.floor(state.clock.getElapsedTime() * 1000)
       for (let i = 0; i < count; i++) {
         positions[i * 3 + 1] += 0.02
         if (positions[i * 3 + 1] > 2) {
           positions[i * 3 + 1] = 0
-          positions[i * 3] = (Math.random() - 0.5) * 0.5
-          positions[i * 3 + 2] = (Math.random() - 0.5) * 0.5
+          positions[i * 3] = (randomAt(i + seed, count) - 0.5) * 0.5
+          positions[i * 3 + 2] = (randomAt(i + seed + 1, count + 3) - 0.5) * 0.5
         }
       }
       points.current.geometry.attributes.position.needsUpdate = true

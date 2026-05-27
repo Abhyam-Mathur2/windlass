@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function WhereToBuy() {
   return (
     <section id="where-to-buy" className="py-24 bg-iron-dark border-t border-aged-gold/10">
